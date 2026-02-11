@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GameState, Team } from '../types';
+import { GameState, Team, GamePhase } from '../types';
 import { Eye, EyeOff, XCircle, Play, Trophy, Settings, ChevronUp, ChevronDown, Flag } from 'lucide-react';
 
 interface ControlPanelProps {
@@ -62,7 +62,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                    <button
                      key={ans.id}
                      onClick={() => !ans.revealed && onRevealAnswer(ans.id)}
-                     disabled={ans.revealed || phase === 'GAME_OVER'}
+                     disabled={ans.revealed || phase === GamePhase.GAME_OVER}
                      className={`
                        flex justify-between items-center px-3 py-3 rounded-lg text-left transition-all group text-sm
                        ${ans.revealed 
@@ -93,7 +93,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                 {/* Strike Button */}
                 <button
                   onClick={onStrike}
-                  disabled={phase === 'ROUND_OVER' || phase === 'GAME_OVER'}
+                  disabled={phase === GamePhase.ROUND_OVER || phase === GamePhase.GAME_OVER}
                   className="col-span-1 bg-red-600 hover:bg-red-500 disabled:opacity-50 text-white font-bold p-2 rounded-lg flex flex-col items-center justify-center gap-1 shadow-sm active:translate-y-0.5 transition-all"
                 >
                   <div className="flex items-center gap-1">
@@ -116,7 +116,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                       ${loading ? 'bg-slate-700 text-gray-500' : 'bg-biiffi-yellow hover:bg-yellow-300 text-black'}
                     `}
                   >
-                    {loading ? '...' : (phase === 'GAME_OVER' ? 'Tulokset' : 'Seuraava')} <Play size={18} fill="currentColor" />
+                    {loading ? '...' : (phase === GamePhase.GAME_OVER ? 'Tulokset' : 'Seuraava')} <Play size={18} fill="currentColor" />
                   </button>
                    <button 
                      onClick={onResetGame}
@@ -134,7 +134,7 @@ const ControlPanel: React.FC<ControlPanelProps> = ({
                       <button
                         key={team.id}
                         onClick={() => onAwardPoints(team.id)}
-                        disabled={(phase !== 'FACE_OFF' && phase !== 'ROUND_OVER') || phase === 'GAME_OVER'}
+                        disabled={phase !== GamePhase.FACE_OFF && phase !== GamePhase.ROUND_OVER}
                         className={`
                           py-2 px-2 rounded-lg text-xs font-bold text-white shadow-sm flex items-center justify-center gap-1 transition-transform active:scale-95 truncate
                           ${team.color.replace('bg-', 'bg-').replace('border-', 'hover:brightness-110 ')}

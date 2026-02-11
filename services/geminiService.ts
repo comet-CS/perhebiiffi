@@ -35,12 +35,17 @@ export const generateQuestion = async (previousQuestions: string[] = []): Promis
 
   try {
     const prompt = `
-      Generate a 'Family Feud' style survey question in Finnish. 
-      The question should be something 100 Finnish people might answer. 
-      Include exactly 4 answers.
-      The answers should be common, funny, or culturally specific to Finland.
+      You are generating content for "Perhe Biiffi", a Finnish version of Family Feud.
       
-      IMPORTANT: Do not generate any of the following questions or anything very similar:
+      Task: Generate a survey question in Finnish.
+      Target Audience: Finnish people, humor similar to "Iha Just Imus" (slightly edgy, relatable, funny, or absurd but grounded in Finnish culture).
+      
+      Requirements:
+      1. Question: Something 100 Finnish people might answer. Can be about daily life, stereotypes, celebrities, annoying things, etc.
+      2. Answers: Exactly 4 answers.
+      3. Answers should be sorted by popularity (most popular first).
+      
+      IMPORTANT: Do not generate any of these previous questions:
       ${previousQuestions.join("; ")}
     `;
 
@@ -91,11 +96,14 @@ export const generateQuestion = async (previousQuestions: string[] = []): Promis
       // Limit to exactly 4 answers
       const limitedAnswers = mappedAnswers.slice(0, 4);
 
-      // Override points with fixed values: 10, 8, 4, 2
-      const FIXED_POINTS = [10, 8, 4, 2];
+      // Override points with fixed values: 10, 8, 4, 2 for simplicity in this game version
+      // Or we can use the AI provided points if they look reasonable.
+      // The original request used fixed points 10, 8, 4, 2. Let's stick to a bit more variance but keeping it simple.
+      // For Perhe Biiffi, big points matter. Let's make them more dramatic: 40, 30, 20, 10.
+      const FIXED_POINTS = [40, 30, 20, 10];
       const finalAnswers = limitedAnswers.map((ans, index) => ({
         ...ans,
-        points: FIXED_POINTS[index] || 2
+        points: FIXED_POINTS[index] || 10
       }));
 
       return {
